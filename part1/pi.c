@@ -68,8 +68,8 @@ void* child_thread(void* args) {
     {
         const __m256d unit = _mm256_set_pd(1, 1, 1, 1);
         // generate 32 random bytes
-        __m256i random_x =  avx_xorshift128plus(&key);
-        __m256i random_y = avx_xorshift128plus(&key);
+        __m256d random_x = _mm256_cvtepi64_pd(avx_xorshift128plus(&key));
+        __m256d random_y = _mm256_cvtepi64_pd(avx_xorshift128plus(&key));
         __m256d max = _mm256_set_pd(LONG_MAX,LONG_MAX,LONG_MAX,LONG_MAX);
         __m256d x = _mm256_div_pd(random_x, max);
         __m256d y = _mm256_div_pd(random_x, max);
