@@ -3,11 +3,9 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include <immintrin.h>
-
-// #include "SIMDxorshift/include/simdxorshift128plus.h"
-// #include "SIMDxorshift/include/simdaesdragontamer.h"
-// #include "SIMDxorshift/include/xorshift128plus.h"
+#include "SIMDxorshift/include/simdxorshift128plus.h"
 
 struct thread_info {
     int tid;
@@ -45,23 +43,58 @@ void* child_thread(void* args) {
     long long number_of_toss = info->number_of_toss;
     // do calculation
     // printf("in thread %d: number_of_toss:%lld\n", info->tid, info->number_of_toss);
-    int i;
+    // int i;
 
+    // for (i = 0; i < number_of_toss; i++) {
+    //     double x = fRand();
+    //     double y = fRand();
+    
+    //     double distance_squared = x * x + y * y;
+        
+    //     if (distance_squared <= 1)
+    //         info->result += 1;
+    // }
+    // printf("in thread %d: result:%lld\n", info->tid, info->result);
     // create a new key
-    // avx_xorshift128plus_key_t mkey;
-    // avx_xorshift128plus_init(324, 4444, &mkey); // values 324, 4444 are arbitrary, must be non-zero
+    avx_xorshift128plus_key_t key;
+    avx_xorshift128plus_init(324, 4444, &key); // values 324, 4444 are arbitrary, must be non-zero
+    size_t i;
+    size_t nBlockWidth = 4; 
+    size_t cntBlock = number_of_toss / nBlockWidth;    // episode
+    size_t cntRem = number_of_toss % nBlockWidth;    // remainder.
 
-    for (i = 0; i < number_of_toss; i++) {
+    // episode computing block
+    for(i=0; i<cntBlock; ++i)
+    {
+        const __m256d unit = _mm256_set_pd(1, 1, 1, 1);
+        // generate 32 random bytes
+        __m256i random_x =  avx_xorshift128plus(&key);
+        __m256i random_y = avx_xorshift128plus(&key);
+        __m256d max = _mm256_set_pd(LONG_MAX,LONG_MAX,LONG_MAX,LONG_MAX);
+        __m256d x = _mm256_div_pd(random_x, max);
+        __m256d y = _mm256_div_pd(random_x, max);
+        __m256d square_x = _mm256_mul_pd(x, x);
+        __m256d square_y = _mm256_mul_pd(y, y);
+        __m256d square_sum = _mm256_add_pd(square_x, square_y);
+        __m256d v_cmp = _mm256_cmp_pd(square_sum, unit, _CMP_LE_OS);
+        int result = _mm256_movemask_pd(v_cmp);
+
+        if (result != 0) {
+            info->result = info->result + _mm_popcnt_u32(result);
+        }
+    }
+
+    // 处理剩下的.
+    for(i=0; i<cntRem; ++i)
+    {
         double x = fRand();
         double y = fRand();
         double distance_squared = x * x + y * y;
-        __m256d a;
-        __m256d b;
-        _mm256_mul_pd()
+    
         if (distance_squared <= 1)
             info->result += 1;
     }
-    // printf("in thread %d: result:%lld\n", info->tid, info->result);
+
     pthread_exit(NULL);
 }
 
