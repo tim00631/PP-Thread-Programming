@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <immintrin.h>
-#include "simdxorshift128plus.h"
+// #include "simdxorshift128plus.h"
 
 struct thread_info {
     int tid;
@@ -39,7 +39,7 @@ double fRand() {
 void* child_thread(void* args) {
     // get data
     struct thread_info* info = (struct thread_info*)args;
-    int tid = info->tid;
+    // int tid = info->tid;
     long long number_of_toss = info->number_of_toss;
     // do calculation
     // printf("in thread %d: number_of_toss:%lld\n", info->tid, info->number_of_toss);
@@ -56,8 +56,8 @@ void* child_thread(void* args) {
     // }
     // printf("in thread %d: result:%lld\n", info->tid, info->result);
     // create a new key
-    avx_xorshift128plus_key_t key;
-    avx_xorshift128plus_init(324, 4444, &key); // values 324, 4444 are arbitrary, must be non-zero
+    // avx_xorshift128plus_key_t key;
+    // avx_xorshift128plus_init(324, 4444, &key); // values 324, 4444 are arbitrary, must be non-zero
     size_t i;
     size_t nBlockWidth = 4; 
     size_t cntBlock = number_of_toss / nBlockWidth;    // episode
@@ -68,12 +68,13 @@ void* child_thread(void* args) {
     {
         const __m256d unit = _mm256_set_pd(1, 1, 1, 1);
         // generate 32 random bytes
-
-        __m256d random_x = _mm256_cvtepi64_pd(avx_xorshift128plus(&key));
-        __m256d random_y = _mm256_cvtepi64_pd(avx_xorshift128plus(&key));
-        __m256d max = _mm256_set_pd(LONG_MAX,LONG_MAX,LONG_MAX,LONG_MAX);
-        __m256d x = _mm256_div_pd(random_x, max);
-        __m256d y = _mm256_div_pd(random_y, max);
+        __m256d x = _mm256_set_pd(fRand(),fRand(),fRand(),fRand());
+        __m256d y = _mm256_set_pd(fRand(),fRand(),fRand(),fRand());
+        // __m256d random_x = _mm256_cvtepi64_pd(avx_xorshift128plus(&key));
+        // __m256d random_y = _mm256_cvtepi64_pd(avx_xorshift128plus(&key));
+        // __m256d max = _mm256_set_pd(LONG_MAX,LONG_MAX,LONG_MAX,LONG_MAX);
+        // __m256d x = _mm256_div_pd(random_x, max);
+        // __m256d y = _mm256_div_pd(random_y, max);
         __m256d square_x = _mm256_mul_pd(x, x);
         __m256d square_y = _mm256_mul_pd(y, y);
         __m256d square_sum = _mm256_add_pd(square_x, square_y);
@@ -85,7 +86,7 @@ void* child_thread(void* args) {
         }
     }
 
-    // 处理剩下的.
+    // remainder
     for(i=0; i<cntRem; ++i)
     {
         double x = fRand();
