@@ -3,6 +3,9 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+// #include "SIMDxorshift/include/simdxorshift128plus.h"
+// #include "SIMDxorshift/include/simdaesdragontamer.h"
+// #include "SIMDxorshift/include/xorshift128plus.h"
 
 struct thread_info {
     int tid;
@@ -10,11 +13,25 @@ struct thread_info {
     long long result;
 };
 
+uint32_t xor128(void) {
+    static uint32_t x = 123456789;
+    static uint32_t y = 362436069;
+    static uint32_t z = 521288629;
+    static uint32_t w = 88675123;
+    uint32_t t;
+
+    t = x ^ (x << 11);
+    x = y; y = z; z = w;
+    return w = w ^ (w >> 19) ^ t ^ (t >> 8);
+}   
+
 double fRand() {
-    long long MAX = ((long long)RAND_MAX << 31) + RAND_MAX;
-    long long rand_num = ((long long)rand() << 31) + rand();
+    // long long MAX = ((long long)RAND_MAX << 31) + RAND_MAX;
+    // long long rand_num = ((long long)rand() << 31) + rand();
     // printf("%lld, %lld, %lf\n", rand_num, MAX, (double)rand_num/MAX);
-    return ((double)rand_num / (double)MAX);
+    
+    return xor128() / 4294967296.0;
+    // return ((double)rand_num / (double)MAX);
 }
 
 void* child_thread(void* args) {
@@ -25,6 +42,11 @@ void* child_thread(void* args) {
     // do calculation
     // printf("in thread %d: number_of_toss:%lld\n", info->tid, info->number_of_toss);
     int i;
+
+    // create a new key
+    // avx_xorshift128plus_key_t mkey;
+    // avx_xorshift128plus_init(324, 4444, &mkey); // values 324, 4444 are arbitrary, must be non-zero
+
     for (i = 0; i < number_of_toss; i++) {
         double x = fRand();
         double y = fRand();
@@ -39,6 +61,7 @@ void* child_thread(void* args) {
 int number_of_cores = 8;
 long long total_of_tosses = 1e8;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
 
 int main(int argc, char* argv[]) {
     if(argc == 3) {
