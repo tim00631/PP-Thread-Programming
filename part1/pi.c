@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <immintrin.h>
-#include "SIMDxorshift/include/simdxorshift128plus.h"
+#include "simdxorshift128plus.h"
 
 struct thread_info {
     int tid;
