@@ -21,15 +21,17 @@ uint32_t xor128(void) {
     uint32_t t;
 
     t = x ^ (x << 11);
-    x = y; y = z; z = w;
+    x = y;
+    y = z;
+    z = w;
     return w = w ^ (w >> 19) ^ t ^ (t >> 8);
-}   
+}
 
 double fRand() {
     // long long MAX = ((long long)RAND_MAX << 31) + RAND_MAX;
     // long long rand_num = ((long long)rand() << 31) + rand();
     // printf("%lld, %lld, %lf\n", rand_num, MAX, (double)rand_num/MAX);
-    
+
     return xor128() / 4294967296.0;
     // return ((double)rand_num / (double)MAX);
 }
@@ -62,9 +64,8 @@ int number_of_cores = 8;
 long long total_of_tosses = 1e8;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-
 int main(int argc, char* argv[]) {
-    if(argc == 3) {
+    if (argc == 3) {
         number_of_cores = atoi(argv[1]);
         total_of_tosses = atoll(argv[2]);
     }
