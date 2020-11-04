@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <immintrin.h>
+
 // #include "SIMDxorshift/include/simdxorshift128plus.h"
 // #include "SIMDxorshift/include/simdaesdragontamer.h"
 // #include "SIMDxorshift/include/xorshift128plus.h"
@@ -53,6 +55,9 @@ void* child_thread(void* args) {
         double x = fRand();
         double y = fRand();
         double distance_squared = x * x + y * y;
+        __m256d a;
+        __m256d b;
+        _mm256_mul_pd()
         if (distance_squared <= 1)
             info->result += 1;
     }
@@ -96,10 +101,10 @@ int main(int argc, char* argv[]) {
     }
     for (i = 0; i < number_of_cores; i++) {
         pthread_join(threads[i], NULL);
-        // pthread_mutex_lock(&mutex);
+        pthread_mutex_lock(&mutex);
         // printf("after thread %d: %lld\n", info[i].tid, info[i].result);
         total_in_circle += info[i].result;
-        // pthread_mutex_unlock(&mutex);
+        pthread_mutex_unlock(&mutex);
     }
 
     printf("%lf\n", (4 * (double)total_in_circle / (double)total_of_tosses));
