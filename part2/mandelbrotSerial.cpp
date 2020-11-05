@@ -76,7 +76,7 @@ void mandelbrotSerial(
 {
   float dx = (x1 - x0) / width;
   float dy = (y1 - y0) / height;
-
+  printf("x0: %f, y0: %f, x1: %f, y1: %f, width: %d, height: %d, startRow: %d, totalRows: %d,\n", x0, y0, x1, y1, width, height, startRow, totalRows);
   int endRow = startRow + totalRows;
   // printf("startRow: %d, endRow: %d, width: %d\n", startRow, endRow, width);
   for (int j = startRow; j < endRow; j++) // 0~599 600~1199
