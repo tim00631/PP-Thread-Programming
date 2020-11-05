@@ -38,10 +38,12 @@ void workerThreadStart(WorkerArgs *const args)
     // half of the image and thread 1 could compute the bottom half.
     // printf("Hello world from thread %d\n", args->threadId);
     // printf("x0: %f, y0: %f, x1: %f, y1: %f, width: %d, height: %d, startRow: %d, totalRows: %d,\n", args->x0, args->y0, args->x1, args->y1, args->width, args->height, args->startRow, args->totalRows);
-
+    double startTime = CycleTimer::currentSeconds();
     mandelbrotSerial(args->x0,args->y0,args->x1,args->y1,
                     args->width,args->height,args->startRow,args->totalRows,
                     args->maxIterations,args->output);
+    double endTime = CycleTimer::currentSeconds();
+    printf("thread %d: time:%lf\n", args->threadId, endTime - startTime);
 }
 
 //
