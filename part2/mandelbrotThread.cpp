@@ -75,7 +75,7 @@ void mandelbrotThread(
         args[i].x0 = x0; // *
         args[i].y0 = y0; // *
         args[i].x1 = x1; // *
-        args[i].y1 = y1; // *
+        args[i].y1 = y0 + BLOCK_HEIGHT; // *
         args[i].width = width; 
         args[i].height = height / numThreads; // *
         args[i].startRow = i * height / numThreads;
