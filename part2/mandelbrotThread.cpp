@@ -65,18 +65,18 @@ void mandelbrotThread(
     // Creates thread objects that do not yet represent a thread.
     std::thread workers[MAX_THREADS];
     WorkerArgs args[MAX_THREADS];
-    // float BLOCK_HEIGHT = (y1-y0) / numThreads;
-    float BLOCK_WIDTH = (x1-x0) / numThreads;
+    float BLOCK_HEIGHT = (y1-y0) / numThreads;
+    // float BLOCK_WIDTH = (x1-x0) / numThreads;
     for (int i = 0; i < numThreads; i++)
     {
         // TODO FOR PP STUDENTS: You may or may not wish to modify
         // the per-thread arguments here.  The code below copies the
         // same arguments for each thread
-        // args[i].x0 = x0; // *
-        // args[i].y0 = y0 + i * BLOCK_HEIGHT; // *
-        // args[i].x1 = x1; // *
-        // args[i].y1 = y0 + (i+1) * BLOCK_HEIGHT; // *
-        // args[i].width = width; 
+        args[i].x0 = x0; // *
+        args[i].y0 = y0 + i * BLOCK_HEIGHT; // *
+        args[i].x1 = x1; // *
+        args[i].y1 = y0 + (i+1) * BLOCK_HEIGHT; // *
+        args[i].width = width; 
         args[i].height = height / numThreads; // *
         args[i].startRow = i * height / numThreads;
         args[i].totalRows = height / numThreads;
@@ -87,11 +87,11 @@ void mandelbrotThread(
         args[i].threadId = i;
         
         // 縱切
-        args[i].x0 = x0 + i * BLOCK_WIDTH;
-        args[i].y0 = y0;
-        args[i].x1 = x0 + i * BLOCK_WIDTH;
-        args[i].y1 = y1;
-        args[i].width = width; 
+        // args[i].x0 = x0 + i * BLOCK_WIDTH;
+        // args[i].y0 = y0;
+        // args[i].x1 = x0 + i * BLOCK_WIDTH;
+        // args[i].y1 = y1;
+        // args[i].width = width; 
     }
 
     // Spawn the worker threads.  Note that only numThreads-1 std::threads
