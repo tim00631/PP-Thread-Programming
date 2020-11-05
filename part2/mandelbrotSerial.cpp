@@ -87,8 +87,9 @@ void mandelbrotSerial(
       int index = (j * width + i);
 
       output[index] = mandel(x, y, maxIterations);
-      if(j == 0 && i == 0){
+      if(j == 399 && i == 576){
         printf("x,y = %f,%f\n", x,y);
+        printf("index: %d\n", index);
         printf("output[index]: %d\n", output[index]);
       }
     }
