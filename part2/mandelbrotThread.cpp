@@ -73,7 +73,7 @@ void mandelbrotThread(
         // the per-thread arguments here.  The code below copies the
         // same arguments for each thread
         args[i].x0 = x0; // *
-        args[i].y0 = y0 + i * BLOCK_HEIGHT; // *
+        args[i].y0 = y0; // *
         args[i].x1 = x1; // *
         args[i].y1 = y0 + (i+1) * BLOCK_HEIGHT; // *
         args[i].width = width; 
