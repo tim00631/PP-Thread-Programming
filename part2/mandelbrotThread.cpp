@@ -89,15 +89,15 @@ void mandelbrotThread(
         // 縱切
         // args[i].x0 = x0 + i * BLOCK_WIDTH;
         // args[i].y0 = y0;
-        // args[i].x1 = x0 + i * BLOCK_WIDTH;
+        // args[i].x1 = x0 + (i+1) * BLOCK_WIDTH;
         // args[i].y1 = y1;
-        // args[i].width = width/ numThreads; 
+        // args[i].width = width / numThreads; 
         // args[i].height = height; // *
         // args[i].startRow = 0;
         // args[i].totalRows = height;
         // args[i].maxIterations = maxIterations;
         // args[i].numThreads = numThreads;
-        // args[i].output = output + i * width/numThreads;
+        // args[i].output = output + i* width/numThreads;
         // args[i].threadId = i;
     }
 
