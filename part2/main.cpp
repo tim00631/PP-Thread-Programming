@@ -147,6 +147,10 @@ int main(int argc, char** argv) {
     for (int i = 0; i < 5; ++i) {
       memset(output_thread, 0, width * height * sizeof(int));
         double startTime = CycleTimer::currentSeconds();
+        // printf("before assign\n");
+        // // output_thread[1920000] = 11111;
+        // printf("after assign\n");
+        printf("before createThread, x0: %f, y0: %f, x1: %f, y1: %f, width: %d, height: %d\n", x0,y0,x1,y1,width,height);
         mandelbrotThread(numThreads, x0, y0, x1, y1, width, height, maxIterations, output_thread);
         double endTime = CycleTimer::currentSeconds();
         minThread = std::min(minThread, endTime - startTime);

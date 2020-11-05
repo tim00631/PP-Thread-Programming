@@ -36,7 +36,7 @@
    NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-
+#include<stdio.h>
 static inline int mandel(float c_re, float c_im, int count)
 {
   float z_re = c_re, z_im = c_im;
@@ -78,16 +78,23 @@ void mandelbrotSerial(
   float dy = (y1 - y0) / height;
 
   int endRow = startRow + totalRows;
-
-  for (int j = startRow; j < endRow; j++)
+  // printf("startRow: %d, endRow: %d, width: %d\n", startRow, endRow, width);
+  for (int j = startRow; j < endRow; j++) // 0~599 600~1199
   {
-    for (int i = 0; i < width; ++i)
+    for (int i = 0; i < width; ++i) // 0~ 1599
     {
       float x = x0 + i * dx;
       float y = y0 + j * dy;
 
       int index = (j * width + i);
+      // printf("before index:%d, j:%d, i:%d\n", index,j ,i);
       output[index] = mandel(x, y, maxIterations);
+      // printf("after index:%d, j:%d, i:%d\n", index,j ,i);
+
+      // if(startRow >= 600)
+      //   printf("index:%d, j:%d, i:%d\n", index,j ,i);
+      // 1919999
     }
+      // printf("output j:%d\n",j);
   }
 }
