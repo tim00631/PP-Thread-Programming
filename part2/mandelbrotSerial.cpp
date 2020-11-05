@@ -77,9 +77,9 @@ void mandelbrotSerial(
   float dx = (x1 - x0) / width;
   float dy = (y1 - y0) / height;
   int endRow = startRow + totalRows;
-  for (int j = startRow; j < endRow; j++) // 0~599 600~1199
+  for (int j = startRow; j < endRow; j++)
   {
-    for (int i = 0; i < width; ++i) // 0~ 1599
+    for (int i = 0; i < width; ++i)
     {
       float x = x0 + i * dx;
       float y = y0 + j * dy;
@@ -87,11 +87,6 @@ void mandelbrotSerial(
       int index = (j * width + i);
 
       output[index] = mandel(x, y, maxIterations);
-      if(j == 399 && i == 576){
-        printf("x,y = %f,%f\n", x,y);
-        printf("index: %d\n", index);
-        printf("output[index]: %d\n", output[index]);
-      }
     }
   }
 }
