@@ -83,7 +83,7 @@ void mandelbrotThread(
         args[i].maxIterations = maxIterations;
         args[i].numThreads = numThreads;
         args[i].output = output + i * height/numThreads;
-        printf("output range: %d\n", i * width * args[i].totalRows);
+        // printf("output range: %d\n", i * width * args[i].totalRows);
         args[i].threadId = i;
         
         // 縱切
