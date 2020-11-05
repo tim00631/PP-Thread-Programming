@@ -85,12 +85,12 @@ void mandelbrotSerial(
       float y = y0 + j * dy;
 
       int index = (j * width + i);
+
+      output[index] = mandel(x, y, maxIterations);
       if(j == 0 && i == 0){
         printf("x,y = %f,%f\n", x,y);
         printf("output[index]: %d\n", output[index]);
       }
-      output[index] = mandel(x, y, maxIterations);
-      // 1919999
     }
   }
 }
